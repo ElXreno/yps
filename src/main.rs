@@ -120,7 +120,7 @@ fn sync(
             }
 
             for video in playlist_entries {
-                print!("Downloading '{}'... ", video.title);
+                println!("Downloading '{}'... ", video.title);
 
                 let url = format!("https://www.youtube.com/watch?v={}", video.id);
                 let video_info = YoutubeDl::new(url)
