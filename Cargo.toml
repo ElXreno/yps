@@ -27,3 +27,4 @@ youtube_dl = { git = "https://github.com/ElXreno/youtube-dl-rs", branch="feature
 log = "0.4.8"
 env_logger = "0.7.1"
 glob = "0.3.0"
+clap = "2.33.0"
