@@ -96,6 +96,7 @@ fn sync(
                         "'{}' already exists, skipping...",
                         playlist_entries.get(exists.unwrap()).unwrap().title
                     );
+                    playlist_entries.remove(exists.unwrap());
                 } else {
                     print!(
                         "Unknown file '{}' ",
@@ -109,7 +110,7 @@ fn sync(
                     );
 
                     if remove_unknown_files {
-                        println!(", removing... ");
+                        print!(", removing... ");
 
                         if std::fs::remove_file(&exists_video.unwrap()).is_ok() {
                             println!("Done!");
@@ -120,8 +121,6 @@ fn sync(
                         println!(", skipping...");
                     }
                 }
-
-                playlist_entries.remove(exists.unwrap());
             }
 
             for video in playlist_entries {
