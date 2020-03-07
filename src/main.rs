@@ -110,7 +110,6 @@ fn sync(
 
                     if remove_unknown_files {
                         println!(", removing... ");
-                        playlist_entries.remove(exists.unwrap());
 
                         if std::fs::remove_file(&exists_video.unwrap()).is_ok() {
                             println!("Done!");
@@ -121,6 +120,8 @@ fn sync(
                         println!(", skipping...");
                     }
                 }
+
+                playlist_entries.remove(exists.unwrap());
             }
 
             for video in playlist_entries {
