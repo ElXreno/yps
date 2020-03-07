@@ -69,6 +69,8 @@ fn sync(
     file_pattern: &str,
     remove_unknown_files: bool,
 ) -> () {
+    println!("Fetching info...");
+
     let output = YoutubeDl::new(playlist_url)
         .flat_playlist(true)
         .run()
@@ -118,7 +120,7 @@ fn sync(
             }
 
             for video in playlist_entries {
-                println!("Downloading '{}'...", video.title);
+                print!("Downloading '{}'... ", video.title);
 
                 let url = format!("https://www.youtube.com/watch?v={}", video.id);
                 let video_info = YoutubeDl::new(url)
@@ -129,7 +131,7 @@ fn sync(
                     .unwrap();
 
                 if let YoutubeDlOutput::None = video_info {
-                    println!("Downloaded '{}'!", video.title)
+                    println!("Done!")
                 }
             }
         }
