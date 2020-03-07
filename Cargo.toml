@@ -6,10 +6,9 @@ edition = "2018"
 
 # Profiles
 [profile.dev]
-opt-level = 1
+opt-level = 0
 overflow-checks = true
 debug-assertions = true
-panic = "abort"
 codegen-units = 8
 lto = false
 incremental = true
