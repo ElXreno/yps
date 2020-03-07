@@ -20,8 +20,8 @@ jobs:
       uses: hecrj/setup-rust-action@v1.3.1
       with:
         rust-version: ${{ matrix.rust }}
-
-    - uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
 
     - name: Build
       run: cargo build --verbose
@@ -33,7 +33,7 @@ jobs:
       run: cargo test --verbose
 
     - name: Upload Artifacts
-        uses: actions/upload-artifact@v1
-        with:
-          name: yps_rust-${{ matrix.rust }}-${{ matrix.os }}
-          path: target/release/yps
+      uses: actions/upload-artifact@v1
+      with:
+        name: yps_rust-${{ matrix.rust }}-${{ matrix.os }}
+        path: target/release/yps
