@@ -29,6 +29,9 @@ jobs:
     - name: Build release
       run: cargo build --release --verbose
 
+    - name: Strip release
+      run: strip target/release/yps
+
     - name: Run tests
       run: cargo test --verbose
 
