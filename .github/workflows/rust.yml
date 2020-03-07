@@ -16,9 +16,10 @@ jobs:
         rust: [stable, nightly]
 
     steps:
-    - uses: hecrj/setup-rust-action@v1
-        with:
-          rust-version: ${{ matrix.rust }}
+    - name: Set up a Rust toolchain
+      uses: hecrj/setup-rust-action@v1.3.1
+      with:
+        rust-version: ${{ matrix.rust }}
 
     - uses: actions/checkout@v2
 
