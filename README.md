@@ -43,4 +43,9 @@ yps --remove-unknown-files -t '%(title)s-%(id)s_%(format_id)s.%(ext)s' --format 
     ~/Music/youtube-playlist
 ```
 
+### Debugging:
+```bash
+RUST_LOG=trace yps https://www.youtube.com/playlist?list=PLmPVxv5DEDa1W3UN7rujKcABkra9k-Jjh ~/Music/youtube-playlist
+```
+
 More info about output template you can find [here](https://github.com/ytdl-org/youtube-dl/blob/master/README.md#output-template).
