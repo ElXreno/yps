@@ -2,12 +2,21 @@ extern crate glob;
 extern crate youtube_dl;
 #[macro_use]
 extern crate clap;
+#[macro_use]
+extern crate log;
 
 use clap::{App, AppSettings, Arg};
 use youtube_dl::{YoutubeDl, YoutubeDlOutput};
 
+use env_logger::Env;
+use std::io::Write;
+
 fn main() {
-    env_logger::init();
+    env_logger::from_env(Env::default().default_filter_or("info"))
+        .format(|buf, record| writeln!(buf, "{}: {}", record.level(), record.args()))
+        .init();
+
+    trace!("Parsing arguments...");
 
     let matches = App::new(crate_name!())
         .version(crate_version!())
@@ -53,6 +62,8 @@ fn main() {
     let output_file_template = matches.value_of("output_file_template").unwrap();
     let remove_unknown_files = matches.is_present("remove_unknown_files");
 
+    trace!("Starting sync...");
+
     sync(
         playlist_url,
         destination_folder,
@@ -69,7 +80,7 @@ fn sync(
     output_file_template: &str,
     remove_unknown_files: bool,
 ) -> () {
-    println!("Fetching info...");
+    info!("Fetching info about url...");
 
     let output = YoutubeDl::new(playlist_url)
         .flat_playlist(true)
@@ -77,54 +88,43 @@ fn sync(
         .unwrap();
     match output {
         YoutubeDlOutput::Playlist(playlist) => {
-            let mut playlist_entries = playlist.entries.unwrap();
+            let mut videos = playlist.entries.unwrap();
 
-            let exists_videos = glob::glob(&format!("{}/*", destination_folder)).unwrap();
+            info!("Fetched playlist, items: {}", videos.iter().count());
 
-            for exists_video in exists_videos {
-                let exists = playlist_entries.iter().position(|s| {
-                    exists_video
-                        .as_ref()
-                        .unwrap()
-                        .to_str()
-                        .unwrap()
-                        .contains(&s.id)
-                });
+            let files = glob::glob(&format!("{}/*", destination_folder)).unwrap();
 
-                if exists.is_some() {
-                    println!(
+            for file in files {
+                debug!("Checking file '{:?}'", file);
+
+                let is_exists = videos
+                    .iter()
+                    .position(|s| file.as_ref().unwrap().to_str().unwrap().contains(&s.id));
+
+                if is_exists.is_some() {
+                    info!(
                         "'{}' already exists, skipping...",
-                        playlist_entries.get(exists.unwrap()).unwrap().title
+                        videos.get(is_exists.unwrap()).unwrap().title
                     );
-                    playlist_entries.remove(exists.unwrap());
+                    videos.remove(is_exists.unwrap());
                 } else {
-                    print!(
-                        "Unknown file '{}' ",
-                        &exists_video
-                            .as_ref()
-                            .unwrap()
-                            .file_name()
-                            .unwrap()
-                            .to_str()
-                            .unwrap()
-                    );
+                    let file = &file.unwrap();
+                    let filename = file.file_name().unwrap().to_str().unwrap();
 
                     if remove_unknown_files {
-                        print!(", removing... ");
+                        warn!("Unknown file '{}', removing...", filename);
 
-                        if std::fs::remove_file(&exists_video.unwrap()).is_ok() {
-                            println!("Done!");
-                        } else {
-                            println!("Error!");
+                        if std::fs::remove_file(file).is_err() {
+                            error!("Failed to remove '{}'!", filename);
                         }
                     } else {
-                        println!(", skipping...");
+                        warn!("Unknown file '{}', skipping...", filename);
                     }
                 }
             }
 
-            for video in playlist_entries {
-                println!("Downloading '{}'... ", video.title);
+            for video in videos {
+                info!("Downloading '{}'...", video.title);
 
                 let url = format!("https://www.youtube.com/watch?v={}", video.id);
                 let video_info = YoutubeDl::new(url)
@@ -135,13 +135,15 @@ fn sync(
                     .unwrap();
 
                 if let YoutubeDlOutput::None = video_info {
-                    println!("Done!")
+                    info!("Done!")
                 }
             }
         }
-        YoutubeDlOutput::SingleVideo(video) => {
-            println!("It's a video! Uploader: {:#?}", &video.uploader);
+        YoutubeDlOutput::SingleVideo(_) => {
+            error!("It's a video, not playlist!");
         }
         YoutubeDlOutput::None => {}
     }
+
+    info!("Work complete!")
 }
