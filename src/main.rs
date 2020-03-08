@@ -1,9 +1,10 @@
-extern crate glob;
-extern crate youtube_dl;
 #[macro_use]
 extern crate clap;
 #[macro_use]
 extern crate log;
+
+extern crate glob;
+extern crate youtube_dl;
 
 use clap::{App, AppSettings, Arg};
 use youtube_dl::{YoutubeDl, YoutubeDlOutput};
