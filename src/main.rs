@@ -34,10 +34,10 @@ fn main() {
                 .default_value("bestaudio"),
         )
         .arg(
-            Arg::with_name("file_pattern")
-                .short("p")
-                .long("pattern")
-                .help("Output file pattern")
+            Arg::with_name("output_file_template")
+                .short("t")
+                .long("template")
+                .help("Output file template")
                 .default_value("%(title)s-%(id)s.%(ext)s"),
         )
         .arg(
@@ -50,14 +50,14 @@ fn main() {
     let playlist_url = matches.value_of("playlist_url").unwrap();
     let destination_folder = matches.value_of("destination_folder").unwrap();
     let format = matches.value_of("format").unwrap();
-    let file_pattern = matches.value_of("file_pattern").unwrap();
+    let output_file_template = matches.value_of("output_file_template").unwrap();
     let remove_unknown_files = matches.is_present("remove_unknown_files");
 
     sync(
         playlist_url,
         destination_folder,
         format,
-        file_pattern,
+        output_file_template,
         remove_unknown_files,
     )
 }
@@ -66,7 +66,7 @@ fn sync(
     playlist_url: &str,
     destination_folder: &str,
     format: &str,
-    file_pattern: &str,
+    output_file_template: &str,
     remove_unknown_files: bool,
 ) -> () {
     println!("Fetching info...");
@@ -130,7 +130,7 @@ fn sync(
                 let video_info = YoutubeDl::new(url)
                     .format(format)
                     .download(true)
-                    .output_pattern(format!("{}/{}", destination_folder, file_pattern))
+                    .output_template(format!("{}/{}", destination_folder, output_file_template))
                     .run()
                     .unwrap();
 
