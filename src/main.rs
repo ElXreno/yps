@@ -9,7 +9,10 @@ use clap::{App, AppSettings, Arg};
 use youtube_dl::{YoutubeDl, YoutubeDlOutput};
 
 use env_logger::Env;
+use std::error::Error;
 use std::io::Write;
+use std::path::PathBuf;
+use std::process::exit;
 
 fn main() {
     env_logger::from_env(Env::default().default_filter_or("info"))
@@ -61,6 +64,24 @@ fn main() {
     let format = matches.value_of("format").unwrap();
     let output_file_template = matches.value_of("output_file_template").unwrap();
     let remove_unknown_files = matches.is_present("remove_unknown_files");
+
+    {
+        trace!("Checking destination folder...");
+
+        let destination_folder = PathBuf::from(&destination_folder);
+        if !destination_folder.exists() {
+            match std::fs::create_dir_all(destination_folder) {
+                Ok(()) => println!("Destination dir created successfully!"),
+                Err(e) => {
+                    error!("'{}'", e.description());
+                    exit(1);
+                }
+            }
+        } else if !destination_folder.is_dir() {
+            error!("Destination folder is not a folder! Exiting...");
+            exit(1);
+        }
+    }
 
     trace!("Starting sync...");
 
