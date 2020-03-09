@@ -35,9 +35,17 @@ jobs:
 
     - name: Run tests
       run: cargo test --verbose
-
-    - name: Upload Artifacts
+    
+    - if: matrix.os == 'ubuntu-*'
+      name: Upload Artifacts (Linux)
       uses: actions/upload-artifact@v1
       with:
         name: yps_rust-${{ matrix.rust }}-${{ matrix.os }}
-        path: target/release/yps*
+        path: target/release/yps
+    
+    - if: matrix.os == 'windows-*'
+      name: Upload Artifacts (Windows)
+      uses: actions/upload-artifact@v1
+      with:
+        name: yps_rust-${{ matrix.rust }}-${{ matrix.os }}
+        path: target/release/yps.exe
