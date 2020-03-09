@@ -9,7 +9,6 @@ use clap::{App, AppSettings, Arg};
 use youtube_dl::{YoutubeDl, YoutubeDlOutput};
 
 use env_logger::Env;
-use std::error::Error;
 use std::io::Write;
 use std::path::PathBuf;
 use std::process::exit;
