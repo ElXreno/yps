@@ -73,7 +73,7 @@ fn main() {
             match std::fs::create_dir_all(destination_folder) {
                 Ok(()) => println!("Destination dir created successfully!"),
                 Err(e) => {
-                    error!("'{}'", e.description());
+                    error!("'{}'", e);
                     exit(1);
                 }
             }
