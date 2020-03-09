@@ -3,12 +3,11 @@ name: Rust
 on: [push, pull_request]
 
 jobs:
-  build:
-
+  build-linux:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, ubuntu-16.04, windows-latest]
+        os: [ubuntu-latest, ubuntu-16.04]
         rust: [stable, nightly]
 
     steps:
@@ -26,22 +25,44 @@ jobs:
       run: cargo build --release --verbose
 
     - name: Strip release
-      if: contains(matrix.os, 'ubuntu')
       run: strip target/release/yps
 
     - name: Run tests
       run: cargo test --verbose
 
-    - name: Upload Artifacts (Linux)
-      if: contains(matrix.os, 'ubuntu')
+    - name: Upload Artifacts
       uses: actions/upload-artifact@v1
       with:
         name: yps_rust-${{ matrix.rust }}-${{ matrix.os }}
         path: target/release/yps
-    
-    - name: Upload Artifacts (Windows)
-      if: contains(matrix.os, 'windows')
-      uses: actions/upload-artifact@v1
-      with:
-        name: yps_rust-${{ matrix.rust }}-${{ matrix.os }}
-        path: target/release/yps.exe
+
+  build-windows:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest]
+        rust: [stable, nightly]
+        target: [i686-pc-windows-msvc, x86_64-pc-windows-msvc]
+
+    steps:
+      - name: Set up a Rust toolchain
+        uses: hecrj/setup-rust-action@v1.3.1
+        with:
+          rust-version: ${{ matrix.rust }}
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build
+        run: cargo build --target=${{ matrix.target }} --verbose
+
+      - name: Build release
+        run: cargo build --target=${{ matrix.target }} --release --verbose
+
+      - name: Run tests
+        run: cargo test --verbose
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: yps_rust-${{ matrix.rust }}-${{ matrix.os }}
+          path: target/release/yps.exe
