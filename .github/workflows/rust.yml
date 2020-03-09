@@ -29,22 +29,22 @@ jobs:
     - name: Build release
       run: cargo build --release --verbose
 
-    - if: matrix.os == 'ubuntu-*'
-      name: Strip release
+    - name: Strip release
+      if: contains(matrix.os, 'windows')
       run: strip target/release/yps
 
     - name: Run tests
       run: cargo test --verbose
-    
-    - if: matrix.os == 'ubuntu-*'
-      name: Upload Artifacts (Linux)
+
+    - name: Upload Artifacts (Linux)
+      if: contains(matrix.os, 'ubuntu')
       uses: actions/upload-artifact@v1
       with:
         name: yps_rust-${{ matrix.rust }}-${{ matrix.os }}
         path: target/release/yps
     
-    - if: matrix.os == 'windows-*'
-      name: Upload Artifacts (Windows)
+    - name: Upload Artifacts (Windows)
+      if: contains(matrix.os, 'windows')
       uses: actions/upload-artifact@v1
       with:
         name: yps_rust-${{ matrix.rust }}-${{ matrix.os }}
