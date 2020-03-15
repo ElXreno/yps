@@ -17,6 +17,7 @@ USAGE:
 
 FLAGS:
         --add-metadata            Add metadata into supported files
+        --extract-audio           Extract audio from container
     -h, --help                    Prints help information
         --remove-unknown-files    Remove files that not exists in playlist (currently requires '%(id)s' in output
                                   pattern)

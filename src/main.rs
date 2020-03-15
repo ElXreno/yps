@@ -75,6 +75,11 @@ fn main() {
                 .long("add-metadata")
                 .help("Add metadata into supported files"),
         )
+        .arg(
+            Arg::with_name("extract_audio")
+                .long("extract-audio")
+                .help("Extract audio from container"),
+        )
         .get_matches();
 
     let playlist_url = matches.value_of("playlist_url").unwrap();
@@ -84,6 +89,7 @@ fn main() {
     let output_file_template = matches.value_of("output_file_template").unwrap();
     let remove_unknown_files = matches.is_present("remove_unknown_files");
     let add_metadata = matches.is_present("add_metadata");
+    let extract_audio = matches.is_present("extract_audio");
 
     {
         trace!("Checking destination folder...");
@@ -113,6 +119,7 @@ fn main() {
         output_file_template,
         remove_unknown_files,
         add_metadata,
+        extract_audio,
     )
 }
 
@@ -124,6 +131,7 @@ fn sync(
     output_file_template: &str,
     remove_unknown_files: bool,
     add_metadata: bool,
+    extract_audio: bool,
 ) -> () {
     info!("Fetching info about url...");
 
@@ -184,7 +192,8 @@ fn sync(
                     .format(format)
                     .download(true)
                     .output_template(format!("{}/{}", destination_folder, output_file_template))
-                    .add_metadata(add_metadata);
+                    .add_metadata(add_metadata)
+                    .extract_audio(extract_audio);
 
                 if let Some(audio_format) = audio_format {
                     builder.audio_format(audio_format);
