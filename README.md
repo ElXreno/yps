@@ -16,6 +16,7 @@ USAGE:
     yps [FLAGS] [OPTIONS] <URL> <FOLDER>
 
 FLAGS:
+        --add-metadata            Add metadata into supported files
     -h, --help                    Prints help information
         --remove-unknown-files    Remove files that not exists in playlist (currently requires '%(id)s' in output
                                   pattern)
@@ -39,7 +40,7 @@ yps https://www.youtube.com/playlist?list=PLmPVxv5DEDa1W3UN7rujKcABkra9k-Jjh ~/M
 
 ### Custom:
 ```bash
-yps --remove-unknown-files -t '%(title)s-%(id)s_%(format_id)s.%(ext)s' --format bestvideo+bestaudio \ 
+yps --remove-unknown-files -t '%(title)s-%(id)s_%(format_id)s.%(ext)s' --format bestvideo+bestaudio --add-metadata \ 
     https://www.youtube.com/playlist?list=PLmPVxv5DEDa1W3UN7rujKcABkra9k-Jjh \
     ~/Music/youtube-playlist
 ```
