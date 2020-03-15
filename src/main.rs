@@ -140,11 +140,17 @@ fn sync(
             let files = glob::glob(&format!("{}/*", destination_folder)).unwrap();
 
             for file in files {
+                let file = &file.unwrap();
+
+                if file.is_dir() {
+                    continue;
+                }
+
                 debug!("Checking file '{:?}'", file);
 
                 let is_exists = videos
                     .iter()
-                    .position(|s| file.as_ref().unwrap().to_str().unwrap().contains(&s.id));
+                    .position(|s| file.to_str().unwrap().contains(&s.id));
 
                 if is_exists.is_some() {
                     info!(
@@ -153,7 +159,6 @@ fn sync(
                     );
                     videos.remove(is_exists.unwrap());
                 } else {
-                    let file = &file.unwrap();
                     let filename = file.file_name().unwrap().to_str().unwrap();
 
                     if remove_unknown_files {
