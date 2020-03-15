@@ -22,7 +22,7 @@ lto = true
 debug = false
 
 [dependencies]
-youtube_dl = { git = "https://github.com/ElXreno/youtube-dl-rs", branch="feature_download" }
+youtube_dl = { git = "https://github.com/ElXreno/youtube-dl-rs", branch="fork" }
 env_logger = "0.7.1"
 log = "0.4.8"
 glob = "0.3.0"

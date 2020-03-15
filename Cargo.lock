@@ -301,7 +301,7 @@ checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
 [[package]]
 name = "youtube_dl"
 version = "0.4.0"
-source = "git+https://github.com/ElXreno/youtube-dl-rs?branch=feature_download#c45702e8281ee79d36a7e62f49e80d72a559e122"
+source = "git+https://github.com/ElXreno/youtube-dl-rs?branch=fork#3a2b26d540e8b2bc5e7a23c0822940d54644ee13"
 dependencies = [
  "log",
  "serde",

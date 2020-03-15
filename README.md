@@ -13,7 +13,7 @@ ElXreno <elxreno@gmail.com>
 
 
 USAGE:
-    yps [FLAGS] [OPTIONS] <playlist_url> <destination_folder>
+    yps [FLAGS] [OPTIONS] <URL> <FOLDER>
 
 FLAGS:
     -h, --help                    Prints help information
@@ -22,12 +22,13 @@ FLAGS:
     -V, --version                 Prints version information
 
 OPTIONS:
-    -t, --template <file_template>    Output file template [default: %(title)s-%(id)s.%(ext)s]
-    -f, --format <format>             Format for downloading [default: bestaudio]
+        --audio-format <FORMAT>    Audio format (opus, ogg for instance)
+    -f, --format <FORMAT>          Format for downloading [default: bestaudio]
+    -t, --template <TEMPLATE>      Output file template [default: %(title)s-%(id)s.%(ext)s]
 
 ARGS:
-    <playlist_url>          URL of playlist
-    <destination_folder>    Destination folder
+    <URL>       URL of playlist
+    <FOLDER>    Destination folder
 ```
 
 ## Example:
@@ -38,7 +39,7 @@ yps https://www.youtube.com/playlist?list=PLmPVxv5DEDa1W3UN7rujKcABkra9k-Jjh ~/M
 
 ### Custom:
 ```bash
-yps --remove-unknown-files -t '%(title)s-%(id)s_%(format_id)s.%(ext)s' --format bestvieo+bestaudio \ 
+yps --remove-unknown-files -t '%(title)s-%(id)s_%(format_id)s.%(ext)s' --format bestvideo+bestaudio \ 
     https://www.youtube.com/playlist?list=PLmPVxv5DEDa1W3UN7rujKcABkra9k-Jjh \
     ~/Music/youtube-playlist
 ```
