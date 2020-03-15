@@ -102,8 +102,8 @@ fn main() {
     sync(
         playlist_url,
         destination_folder,
-        audio_format,
         format,
+        audio_format,
         output_file_template,
         remove_unknown_files,
     )
@@ -112,8 +112,8 @@ fn main() {
 fn sync(
     playlist_url: &str,
     destination_folder: &str,
-    audio_format: Option<&str>,
     format: &str,
+    audio_format: Option<&str>,
     output_file_template: &str,
     remove_unknown_files: bool,
 ) -> () {
