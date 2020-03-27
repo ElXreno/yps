@@ -5,21 +5,10 @@ authors = ["ElXreno <elxreno@gmail.com>"]
 edition = "2018"
 
 # Profiles
-[profile.dev]
-opt-level = 0
-overflow-checks = true
-debug-assertions = true
-codegen-units = 8
-lto = false
-incremental = true
-
 [profile.release]
-opt-level = 3
-codegen-units = 1
-overflow-checks = false
-debug-assertions = false
 lto = true
-debug = false
+panic = "abort"
+codegen-units = 1
 
 [dependencies]
 youtube_dl = { git = "https://github.com/ElXreno/youtube-dl-rs", branch="fork" }
