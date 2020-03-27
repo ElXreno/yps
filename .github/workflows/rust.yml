@@ -9,7 +9,6 @@ jobs:
       matrix:
         os: [ubuntu-18.04]
         rust: [stable, nightly]
-        PROJECT_NAME: yps
 
     steps:
     - name: Set up a Rust toolchain
@@ -26,7 +25,7 @@ jobs:
       run: cargo build --release --verbose
 
     - name: Strip release
-      run: strip target/release/${{ matrix.PROJECT_NAME }}
+      run: strip target/release/yps
 
     - name: Run tests
       run: cargo test --verbose
@@ -34,5 +33,5 @@ jobs:
     - name: Upload Artifacts
       uses: actions/upload-artifact@v1
       with:
-        name: ${{ matrix.PROJECT_NAME }}_rust-${{ matrix.rust }}-${{ matrix.os }}
-        path: target/release/${{ matrix.PROJECT_NAME }}
+        name: yps_rust-${{ matrix.rust }}-${{ matrix.os }}
+        path: target/release/yps
