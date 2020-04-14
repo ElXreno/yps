@@ -199,10 +199,17 @@ fn sync(
                     builder.audio_format(audio_format);
                 }
 
-                let result = builder.run().unwrap();
+                let result = builder.run();
 
-                if let YoutubeDlOutput::None = result {
-                    info!("Done!")
+                match &result {
+                    Ok(result) => {
+                        if let YoutubeDlOutput::None = result {
+                            info!("Done!");
+                        }
+                    },
+                    Err(e) => {
+                        error!("{}", e);
+                    }
                 }
             }
         }
